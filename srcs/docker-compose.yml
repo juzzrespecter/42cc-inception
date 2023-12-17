@@ -1,0 +1,45 @@
+version: "3.8"
+services:
+  nginx:
+      build: ./nginx
+      image: inception-nginx
+      networks:
+      depends_on:
+        - php
+      restart: always
+      ports:
+        - 443
+  php:
+      build: ./php
+      image: inception-phpsrv
+      networks:
+      depends_on:
+        - mariadb
+      restart: always
+      expose:
+  mariadb:
+      build: ./mariadb
+      image: inception-mariadb
+      networks:
+      restart: always
+      expose:
+  redis:
+  portainer:
+  vsftpd:
+  adminer:
+    
+# volume paths: /home/danrodri/data/*
+volumes:
+  db:
+    driver_opts:
+      type:
+      o:
+      device:
+  wp:
+    driver_opts:
+      type:
+      o:
+      device:
+
+networks:
+  inception:
