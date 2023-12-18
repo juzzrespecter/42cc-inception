@@ -29,6 +29,11 @@ services:
       networks:
       restart: always
       expose:
+      environment:
+        - MYSQL_ROOT_PASSWD=${MYSQL_ROOT_PASSWD}
+        - MYSQL_DB=${MYSQL_DB}
+        - MYSQL_USER=${MYSQL_USER}
+        - MYSQL_USER_PASSWD=${MYSQL_USER_PASSWD}
   redis:
   portainer:
   vsftpd:

@@ -8,4 +8,7 @@ RUN apk add --no-cache mariadb \
     touch /run/openrc/softlevel && \
     rc-service mariadb start
 
+COPY ./mariadb-setup.sql /tmp/
+COPY ./mariadb-entrypoint.sh /tmp/
+
 CMD ["mysqld"]
