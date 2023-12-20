@@ -4,6 +4,7 @@ services:
       build: ./nginx
       image: inception-nginx
       networks:
+        - inception-frontend
       depends_on:
         - php
       restart: always
@@ -13,6 +14,8 @@ services:
       build: ./php
       image: inception-phpsrv
       networks:
+        - inception-frontend
+        - inception-backend
       depends_on:
         - mariadb
       restart: always
@@ -23,34 +26,57 @@ services:
         - DB_USER=${DB_USER}
         - DB_PASSWORD=${DB_PASSWORD}
         - DB_HOST=${DB_HOST}
+      volumes:
+        - wp:/var/www/html
   mariadb:
       build: ./mariadb
       image: inception-mariadb
       networks:
+        - inception-backend
       restart: always
       expose:
+        - 3306
       environment:
         - MYSQL_ROOT_PASSWD=${MYSQL_ROOT_PASSWD}
         - MYSQL_DB=${MYSQL_DB}
         - MYSQL_USER=${MYSQL_USER}
         - MYSQL_USER_PASSWD=${MYSQL_USER_PASSWD}
+      volumes:
+        - db:/var/lib/mysql
   redis:
+      build: ./redis
+      image: inception-redis
+      restart: always
+      depends_on:
+        - php
   portainer:
+      build: ./portainer
+      image: inception-portainer
+      restart: always
   vsftpd:
+      build: ./vsftpd
+      image: inception-vsftpd
+      restart: always
+      depends_on:
+        - php      
   adminer:
+      build: ./adminer
+      image: inception-adminer
+      restart: always
     
 # volume paths: /home/danrodri/data/*
 volumes:
   db:
     driver_opts:
-      type:
-      o:
-      device:
+      type: none
+      o: bind
+      device: /home/danrodri/data/db
   wp:
     driver_opts:
-      type:
-      o:
-      device:
+      type: none
+      o: bind
+      device: /home/danrodri/data/wp
 
 networks:
-  inception:
+  inception-backend:
+  inception-frontend:
