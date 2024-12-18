@@ -5,8 +5,6 @@ services:
       image: inception-nginx
       networks:
         - inception-frontend
-      depends_on:
-        - php
       restart: always
       ports:
         - 443
@@ -17,6 +15,7 @@ services:
         - inception-frontend
         - inception-backend
       depends_on:
+        - nginx
         - mariadb
       restart: always
       expose:
@@ -49,10 +48,6 @@ services:
       restart: always
       depends_on:
         - php
-  portainer:
-      build: ./requirements/portainer
-      image: inception-portainer
-      restart: always
   vsftpd:
       build: ./requirements/vsftpd
       image: inception-vsftpd
@@ -63,6 +58,14 @@ services:
       build: ./requirements/adminer
       image: inception-adminer
       restart: always
+#  grafana:
+#      build: ./requirements/grafana
+#      image: inception-grafana
+#      restart: on_failure
+#  prometheus:
+#      build: ./requirements/prometheus
+#      image: inception-prometheus
+#      restart: on_failure
     
 # volume paths: /home/danrodri/data/*
 volumes:
