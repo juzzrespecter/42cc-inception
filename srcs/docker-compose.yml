@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   nginx:
-      build: ./nginx
+      build: ./requirements/nginx
       image: inception-nginx
       networks:
         - inception-frontend
@@ -11,7 +11,7 @@ services:
       ports:
         - 443
   php:
-      build: ./php
+      build: ./requirements/php
       image: inception-phpsrv
       networks:
         - inception-frontend
@@ -22,14 +22,14 @@ services:
       expose:
         - 8000
       environment:
-        - DB_NAME=${DB_NAME}
-        - DB_USER=${DB_USER}
-        - DB_PASSWORD=${DB_PASSWORD}
+        - DB_NAME=${MYSQL_DB}
+        - DB_USER=${MYSQL_USER}
+        - DB_PASSWORD=${MYSQL_USER_PASSWORD}
         - DB_HOST=${DB_HOST}
       volumes:
         - wp:/var/www/html
   mariadb:
-      build: ./mariadb
+      build: ./requirements/mariadb
       image: inception-mariadb
       networks:
         - inception-backend
@@ -44,23 +44,23 @@ services:
       volumes:
         - db:/var/lib/mysql
   redis:
-      build: ./redis
+      build: ./requirements/redis
       image: inception-redis
       restart: always
       depends_on:
         - php
   portainer:
-      build: ./portainer
+      build: ./requirements/portainer
       image: inception-portainer
       restart: always
   vsftpd:
-      build: ./vsftpd
+      build: ./requirements/vsftpd
       image: inception-vsftpd
       restart: always
       depends_on:
         - php      
   adminer:
-      build: ./adminer
+      build: ./requirements/adminer
       image: inception-adminer
       restart: always
     
